@@ -7,7 +7,21 @@
 			"path": ".vscode"
 		}
 	],
+	"editor.fontSize": 48,
 	"settings": {
-		"github.gitProtocol": "ssh"
-	}
+		"github.gitProtocol": "ssh",
+		"files.trimTrailingWhitespace": true,
+		"files.trimFinalNewlines": true,
+		"workbench.editor.enablePreview": false
+	},
+	"files.autoSave": "onFocusChange",
+    "editor.cursorStyle": "block",
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "[python]": {
+
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.formatOnType": true,
+        "editor.wordBasedSuggestions": "off"
+    },
+
 }
