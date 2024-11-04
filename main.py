@@ -44,6 +44,28 @@ def say_hello(text: str) -> None:
                 print(result['message']['text'])
                 offset = result['update_id']
                 chat_id = result['message']['from']['id']
+                requests.get(
+                    f'{API_URL}{TOKEN}'
+                    f'/sendMessage?chat_id={chat_id}&text={text}'
+                )
+        time.sleep(1)
+        counter += 1
+
+
+def sendPhoto() -> None:
+    offset = -2
+    counter = 0
+    while counter < 100:
+        print('attempt=', counter)
+        print(f'offset={offset}')
+        updates = requests.get(
+            f'{API_URL}{TOKEN}/getUpdates?offset={offset + 1}'
+        ).json()
+        if updates['result']:
+            for result in updates['result']:
+                print(result['message']['text'])
+                offset = result['update_id']
+                chat_id = result['message']['from']['id']
                 try:
                     requests.get(
                         f'{API_URL}{TOKEN}'
@@ -59,4 +81,5 @@ def say_hello(text: str) -> None:
 
 
 if __name__ == '__main__':
-    say_hello('Hello!')
+    # say_hello('Hello!')
+    sendPhoto()
