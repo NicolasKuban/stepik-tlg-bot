@@ -32,10 +32,9 @@ def get_cat_photo() -> str:
 
 def send_request(link: str) -> None:
     offset = -2
-    counter = 0
-    while counter < 100:
-        print('attempt=', counter)
-        print(f'offset={offset}')
+    updates: dict
+    while True:
+        start_time = time.time()
         updates = requests.get(
             f'{API_URL}{TOKEN}/getUpdates?offset={offset + 1}'
         ).json()
@@ -44,9 +43,11 @@ def send_request(link: str) -> None:
                 print(result['message']['text'])
                 offset = result['update_id']
                 chat_id = result['message']['from']['id']
+                do_something()
                 requests.get(f'{link}&chat_id={chat_id}')
-        time.sleep(1)
-        counter += 1
+        time.sleep(3)
+        end_time = time.time()
+        print(f'Время выполнения: {end_time - start_time:.4f}')
 
 
 def get_link_text(text: str) -> str:
@@ -60,36 +61,12 @@ def get_link_photo() -> str:
         return f'{API_URL}{TOKEN}/sendMessage?text={ERROR_TEXT}'
 
 
-def sendPhoto() -> None:
-    offset = -2
-    counter = 0
-    while counter < 100:
-        print('attempt=', counter)
-        print(f'offset={offset}')
-        updates = requests.get(
-            f'{API_URL}{TOKEN}/getUpdates?offset={offset + 1}'
-        ).json()
-        if updates['result']:
-            for result in updates['result']:
-                print(result['message']['text'])
-                offset = result['update_id']
-                chat_id = result['message']['from']['id']
-                try:
-                    requests.get(
-                        f'{API_URL}{TOKEN}'
-                        f'/sendPhoto?chat_id={chat_id}&photo={get_cat_photo()}'
-                    )
-                except CantGetPhoto:
-                    requests.get(
-                        f'{API_URL}{TOKEN}'
-                        f'/sendMessage?chat_id={chat_id}&text={ERROR_TEXT}'
-                    )
-        time.sleep(1)
-        counter += 1
+def do_something() -> None:
+    print('====> Получен update')
 
 
 if __name__ == '__main__':
     # say_hello('Hello!')
     # sendPhoto()
-    # send_request(get_link_text('Привет!'))
-    send_request(get_link_photo())
+    send_request(get_link_text('Привет!'))
+    # send_request(get_link_photo())
