@@ -30,7 +30,7 @@ def get_cat_photo() -> str:
     return cat_photo_link
 
 
-def say_hello(text: str) -> None:
+def send_request(link: str) -> None:
     offset = -2
     counter = 0
     while counter < 100:
@@ -44,12 +44,20 @@ def say_hello(text: str) -> None:
                 print(result['message']['text'])
                 offset = result['update_id']
                 chat_id = result['message']['from']['id']
-                requests.get(
-                    f'{API_URL}{TOKEN}'
-                    f'/sendMessage?chat_id={chat_id}&text={text}'
-                )
+                requests.get(f'{link}&chat_id={chat_id}')
         time.sleep(1)
         counter += 1
+
+
+def get_link_text(text: str) -> str:
+    return f'{API_URL}{TOKEN}/sendMessage?text={text}'
+
+
+def get_link_photo() -> str:
+    try:
+        return f'{API_URL}{TOKEN}/sendPhoto?photo={get_cat_photo()}'
+    except CantGetPhoto:
+        return f'{API_URL}{TOKEN}/sendMessage?text={ERROR_TEXT}'
 
 
 def sendPhoto() -> None:
@@ -82,4 +90,6 @@ def sendPhoto() -> None:
 
 if __name__ == '__main__':
     # say_hello('Hello!')
-    sendPhoto()
+    # sendPhoto()
+    # send_request(get_link_text('Привет!'))
+    send_request(get_link_photo())
