@@ -7,6 +7,7 @@ from config import API_CATS_URL, API_URL, ERROR_TEXT, TOKEN
 
 
 chat_id: int
+TIMEOUT = 60
 
 
 class CantGetPhoto(Exception):
@@ -36,7 +37,8 @@ def send_request(link: str) -> None:
     while True:
         start_time = time.time()
         updates = requests.get(
-            f'{API_URL}{TOKEN}/getUpdates?offset={offset + 1}'
+            f'{API_URL}{TOKEN}'
+            f'/getUpdates?offset={offset + 1}&timeout={TIMEOUT}'
         ).json()
         if updates['result']:
             for result in updates['result']:
